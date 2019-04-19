@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Kontur.Courses.Git
 {
@@ -17,11 +18,29 @@ namespace Kontur.Courses.Git
 				Console.ForegroundColor = ConsoleColor.Gray;
 				var line = Console.ReadLine();
 				if (line == null) break;
-				var args = Calculator.SplitInput(line);
+				var args = SplitInput(line);
 				var result = calculator.Calculate(args);
 				Console.ForegroundColor = result.HasValue ? ConsoleColor.Green : ConsoleColor.Red;
 				Console.WriteLine("> " + result);
 			}
+		}
+		
+		public static string[] SplitInput(string line)
+		{
+			if (line.Length == 0) return new string[0];
+			List<string> res = new List<string> { "" };
+			bool isDigit = char.IsDigit(line[0]);
+			foreach (var ch in line)
+			{
+				if (char.IsDigit(ch) != isDigit)
+				{
+					res.Add("");
+					isDigit = !isDigit;
+				}
+				if (!char.IsWhiteSpace(ch))
+					res[res.Count - 1] += ch;
+			}
+			return res.ToArray();
 		}
 	}
 }
